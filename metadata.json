@@ -1,0 +1,7 @@
+{
+  "name": "AgentPay AI",
+  "description": "An Agentic AI Platform for Intelligent Commerce and Payments with AI-guided product discovery, budget optimization, user approval checkpoints, and PayPal Sandbox checkout.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

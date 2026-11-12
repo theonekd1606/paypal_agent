@@ -1,0 +1,1015 @@
+# BUILD A COMPLETE, PRODUCTION-QUALITY APPLICATION: AGENTPAY AI
+
+## 1. YOUR ROLE
+
+Act as a senior full-stack engineer, AI/agentic systems architect, payment integration specialist, database engineer, security engineer, UI/UX designer, QA engineer, and DevOps engineer.
+
+Your responsibility is to design, build, test, debug, and document a complete, functional web application named:
+
+**AgentPay AI — An Agentic AI Platform for Intelligent Commerce and Payments**
+
+Do not deliver only a plan, UI mockup, static prototype, or code snippets. Build a functional, integrated application with a clear implementation process.
+
+Work autonomously on implementation decisions when sufficient information is available. Ask questions only when a genuinely essential decision cannot be resolved safely.
+
+Prioritize working functionality, reliability, security, maintainability, and usability over unnecessary complexity.
+
+## 2. PROJECT VISION
+
+Build an AI-powered commerce assistant that helps users discover, evaluate, compare, and purchase suitable digital products or services.
+
+Users should be able to describe their goals in natural language. The AI agent should analyze their requirements, search a verified product catalog, compare options, optimize recommendations against a budget, and prepare a purchase workflow.
+
+Before initiating a payment, the application must present the purchase details and obtain explicit user approval.
+
+After checkout, the backend must verify the payment status and update the corresponding order and transaction records.
+
+The application must demonstrate meaningful integration between an AI agent and the PayPal Developer Platform.
+
+The central experience must be:
+
+User Request → AI Analysis → Product Discovery → Comparison → Budget Optimization → Cart → User Approval → PayPal Checkout → Payment Verification → Order Confirmation.
+
+Use PayPal Sandbox for development and hackathon demonstrations. Do not process real payments in the initial version.
+
+## 3. CORE TECHNOLOGY STACK
+
+Use the following stack unless a specific compatibility issue requires a documented alternative.
+
+### Frontend
+
+* React
+* TypeScript
+* Vite
+* Tailwind CSS
+* Framer Motion for appropriate animations
+* Lucide React for icons
+* Recharts for analytics
+* React Router for navigation
+
+### Backend
+
+* Python
+* FastAPI
+* Pydantic for request and response validation
+* HTTPX or an appropriate official SDK for external API requests
+* Modular service-oriented architecture
+
+### AI
+
+* Gemini API or Groq API
+* Select one primary provider for the initial implementation.
+* Encapsulate the provider behind a service interface so it can be replaced later.
+* Use structured outputs and schema validation wherever practical.
+* Do not hardcode model names that have not been verified as available.
+
+### Database and Authentication
+
+* Firebase Authentication
+* Cloud Firestore
+* Firebase Admin SDK for backend token verification and authorized server-side operations
+
+### Payments
+
+* PayPal Developer Sandbox
+* PayPal Orders API or the currently supported official integration
+* Server-side order creation, capture, and payment verification
+
+### Deployment
+
+* GitHub for source control
+* Render or another compatible hosting service for the backend
+* A suitable static hosting platform for the frontend
+* Firebase for authentication and database services
+
+Prefer free-tier services where practical. Verify current availability, quotas, and configuration requirements rather than promising unlimited free usage.
+
+## 4. ARCHITECTURE REQUIREMENTS
+
+Organize the application into the following logical layers.
+
+### A. Presentation Layer
+
+Responsible for:
+
+* User interface
+* Navigation
+* Authentication screens
+* AI chat interface
+* Product discovery
+* Product comparison
+* Cart and checkout
+* Order history
+* Analytics dashboard
+* Profile settings
+
+The frontend must never contain private AI API keys, PayPal client secrets, Firebase service-account credentials, or other backend secrets.
+
+### B. API and Application Layer
+
+Implement FastAPI routes for:
+
+* Authentication verification
+* AI conversations
+* Agent tasks
+* Product catalog
+* Product comparison
+* Cart management
+* Order creation
+* PayPal payment operations
+* Order history
+* Transaction history
+* Dashboard analytics
+
+Apply request validation, authorization, ownership checks, sensible error handling, and rate limiting where practical.
+
+### C. AI Agent Layer
+
+Create an AI agent orchestrator responsible for:
+
+1. Understanding user intent.
+2. Extracting product requirements and budget.
+3. Identifying missing information.
+4. Asking clarification questions when necessary.
+5. Creating a structured task plan.
+6. Invoking approved application tools.
+7. Evaluating available catalog options.
+8. Generating recommendations with explanations.
+9. Preparing a purchase plan.
+10. Returning structured results to the frontend.
+
+The agent must use a controlled set of tools rather than unrestricted code execution or arbitrary API access.
+
+Implement the following tools:
+
+* Search catalog.
+* Retrieve product details.
+* Compare products.
+* Calculate purchase totals.
+* Check catalog availability.
+* Prepare cart.
+* Create pending order.
+* Retrieve workflow status.
+
+Payment execution must remain outside autonomous AI decision-making. The agent may prepare a purchase, but the backend must require an explicit user-approved purchase and validate the order before initiating checkout.
+
+Do not let the AI invent prices, products, discounts, or availability. Ground recommendations in actual catalog records.
+
+### D. Commerce and Payment Layer
+
+Implement:
+
+* Product catalog service.
+* Cart service.
+* Order service.
+* PayPal integration service.
+* Payment status verification.
+* Transaction history service.
+* Idempotent payment operations.
+* Failure and cancellation handling.
+
+Keep the order lifecycle explicit and auditable.
+
+### E. Data Layer
+
+Use Cloud Firestore for persistent application data.
+
+Recommended collections:
+
+* users
+* products
+* conversations
+* agent_tasks
+* carts
+* orders
+* transactions
+* activity_logs
+
+Design document structures carefully and enforce user ownership.
+
+Use server-generated timestamps and backend-controlled financial records.
+
+### F. External Integrations
+
+Integrate:
+
+* One AI provider.
+* PayPal Sandbox.
+* Firebase Authentication.
+* Cloud Firestore.
+* Deployment and hosting services.
+
+Do not introduce unnecessary external services or integrations.
+
+## 5. AUTHENTICATION AND USER MANAGEMENT
+
+Implement:
+
+* Email and password sign-up.
+* Email and password sign-in.
+* Google sign-in.
+* Sign-out.
+* Protected application routes.
+* User profile management.
+* User preferences.
+* Budget preferences.
+* Secure session handling.
+* Backend Firebase ID-token verification.
+
+Every protected API must independently validate authentication and authorization.
+
+A frontend route guard is not a substitute for backend authorization.
+
+Users must never be able to read or modify another user's private records by changing a document ID or API parameter.
+
+## 6. AI COMMERCE AGENT FEATURES
+
+### Natural Language Understanding
+
+Allow users to describe their goals, preferences, and budgets using ordinary language.
+
+Example:
+"I have a budget of ₹5,000 and want to start a small online business. Recommend suitable tools."
+
+### Requirement Extraction
+
+Extract:
+
+* Goal
+* Product category
+* Budget
+* Currency
+* Required features
+* Preferences
+* Constraints
+
+Request clarification when essential information is missing.
+
+### Product Discovery
+
+Search the available product catalog using actual stored product information.
+
+Support:
+
+* Text search
+* Category filters
+* Price filters
+* Sorting
+* Product details
+
+### Intelligent Comparison
+
+Compare products based on:
+
+* Price
+* Features
+* Suitability for the stated goal
+* Budget compatibility
+* Catalog availability
+
+Clearly distinguish verified facts from AI-generated opinions.
+
+### Budget Optimization
+
+* Calculate the total cost of selected items.
+* Identify combinations that fit within the budget.
+* Display the remaining budget.
+* Explain trade-offs.
+* Never exceed the approved purchase amount without requesting fresh approval.
+
+### Explainable Recommendations
+
+Explain:
+
+* Why an option is recommended.
+* Which requirements it satisfies.
+* What limitations it has.
+* How much it costs.
+* Why it may be preferable to alternatives.
+
+### Conversation History
+
+Persist conversations for authenticated users and allow them to review previous recommendations.
+
+Validate all AI responses before executing any tool calls.
+
+## 7. AGENTIC WORKFLOW ENGINE
+
+Build a workflow engine with visible progress and explicit states.
+
+Example workflow:
+
+1. Request received.
+2. Requirements analyzed.
+3. Catalog searched.
+4. Products compared.
+5. Budget calculated.
+6. Recommendation prepared.
+7. User approval requested.
+8. Pending order created.
+9. PayPal checkout initiated.
+10. Payment verified.
+11. Order confirmed.
+
+Implement:
+
+* Workflow IDs.
+* Task status.
+* Task history.
+* Tool execution logs.
+* Structured errors.
+* Safe retries.
+* Duplicate-action prevention.
+* Workflow recovery where practical.
+* User approval checkpoints.
+
+Do not claim that an action succeeded unless the underlying operation has been verified.
+
+If the AI provider is unavailable, show a clear error and preserve recoverable user input.
+
+If an external tool fails, record the failure and allow safe recovery without accidentally duplicating a purchase.
+
+Do not automatically retry non-idempotent payment operations without an appropriate idempotency or reconciliation mechanism.
+
+## 8. PRODUCT CATALOG
+
+Implement a working catalog containing clearly identified demonstration products and services.
+
+Each product should support:
+
+* Unique ID.
+* Name.
+* Description.
+* Category.
+* Features.
+* Price.
+* Currency.
+* Availability.
+* Product image or suitable placeholder.
+* Active/inactive status.
+* Creation and update timestamps.
+
+Implement:
+
+* Search.
+* Filters.
+* Sorting.
+* Product detail pages.
+* Comparison interface.
+* Cart integration.
+
+Use seeded demonstration records for the initial version.
+
+Do not claim that demo products represent live third-party inventory.
+
+Do not invent external merchant integrations, live prices, or purchasing capabilities that have not been implemented.
+
+If an administrative catalog editor is added, restrict write operations to explicitly authorized administrators.
+
+## 9. SHOPPING CART AND ORDER MANAGEMENT
+
+Implement:
+
+* Add items to cart.
+* Remove items.
+* Update quantities.
+* Persistent cart.
+* Cart subtotal.
+* Currency validation.
+* Order summary.
+* Budget indicator.
+* Checkout initiation.
+* Pending order creation.
+* Order history.
+* Order detail page.
+* Payment failure handling.
+* Cancellation handling.
+* Order status updates.
+
+Recalculate the cart total on the backend using trusted catalog data.
+
+Do not trust prices, totals, currencies, or ownership information supplied by the browser.
+
+Validate product availability and prices again immediately before checkout.
+
+Define clear order states, such as:
+
+* PENDING
+* AWAITING_PAYMENT
+* PAID
+* PAYMENT_FAILED
+* CANCELLED
+
+Use additional intermediate states if necessary.
+
+Prevent invalid state transitions and duplicate order processing.
+
+## 10. PAYPAL SANDBOX INTEGRATION
+
+This is a mandatory and central project requirement.
+
+Implement the supported PayPal Sandbox payment lifecycle.
+
+### Step 1: Prepare Purchase
+
+* Display products, quantities, prices, currency, and total.
+* Require explicit user confirmation.
+* Bind approval to the exact order and amount.
+* Invalidate approval if the order changes.
+
+### Step 2: Create PayPal Order
+
+* Backend authenticates with PayPal Sandbox.
+* Backend validates the local order.
+* Backend calculates the trusted total.
+* Backend creates a PayPal order using supported API operations.
+* Store the association between local and PayPal order IDs.
+
+### Step 3: Checkout
+
+* Redirect the user to the supported PayPal checkout experience or use the appropriate official checkout integration.
+* Handle user cancellation.
+* Display meaningful loading and error states.
+
+### Step 4: Capture and Verify
+
+* Perform capture on the backend.
+* Verify the response against the expected order, amount, currency, and payment state.
+* Prevent replay and duplicate capture attempts.
+* Treat ambiguous network outcomes as requiring reconciliation rather than automatically declaring failure.
+
+### Step 5: Update Records
+
+* Update the order using a controlled server-side state transition.
+* Record verified transaction information.
+* Display the final status to the user.
+
+Where supported, implement PayPal webhook verification and reconciliation.
+
+Do not treat a browser redirect or frontend success callback as proof of payment.
+
+Do not store card numbers, CVVs, PayPal passwords, or unnecessary sensitive payment information.
+
+Use only Sandbox credentials during development.
+
+## 11. DASHBOARD AND ANALYTICS
+
+Build a polished dashboard containing:
+
+* Total orders.
+* Successful payments.
+* Pending orders.
+* Recent transactions.
+* Recent AI tasks.
+* Budget usage.
+* Recent activity.
+* Spending trends.
+* Category-level summaries.
+
+Calculate metrics from actual database records.
+
+Clearly distinguish pending payments from verified successful payments.
+
+Use Recharts for suitable visualizations.
+
+Provide:
+
+* Loading states.
+* Empty states.
+* Error states.
+* Date filtering where practical.
+* Currency-aware formatting.
+
+Do not display fabricated metrics as real user data.
+
+## 12. TRANSACTION INTELLIGENCE
+
+Implement after the core payment workflow works.
+
+Potential features:
+
+* Spending summaries.
+* Category-based analysis.
+* Monthly charts.
+* Transaction search.
+* Order history filters.
+* Downloadable transaction reports.
+* AI-generated insights based on verified transaction records.
+
+AI-generated insights must distinguish historical facts from estimates and recommendations.
+
+Do not promise accurate forecasts without sufficient historical data.
+
+## 13. UI/UX DESIGN REQUIREMENTS
+
+Create a premium, modern, responsive SaaS experience.
+
+### Visual Direction
+
+Use:
+
+* Dark navy as the primary background.
+* Electric violet and cyan as accent colors.
+* Clear typography.
+* Subtle gradients.
+* Restrained glassmorphism.
+* Consistent spacing.
+* Accessible contrast.
+* Polished cards and tables.
+* Smooth but lightweight animations.
+
+Avoid excessive gradients, distracting effects, clutter, and unnecessary animation.
+
+### Required Screens
+
+1. Landing page.
+2. Sign-up and sign-in.
+3. Dashboard.
+4. AI agent workspace.
+5. Product discovery.
+6. Product details.
+7. Product comparison.
+8. Shopping cart.
+9. Checkout handoff.
+10. Order confirmation.
+11. Order history.
+12. Transaction history.
+13. Workflow activity.
+14. Profile and preferences.
+
+### UI Components
+
+* Sidebar navigation.
+* Top navigation.
+* Responsive layouts.
+* AI conversation panel.
+* Product cards.
+* Comparison tables.
+* Budget indicators.
+* Workflow timelines.
+* Status badges.
+* Confirmation dialogs.
+* Toast notifications.
+* Skeleton loaders.
+* Error messages.
+* Empty-state illustrations.
+* Accessible forms.
+
+All navigation controls and visible action buttons must work.
+
+Do not create decorative controls that imply nonexistent functionality.
+
+Test the application on desktop and mobile viewport sizes.
+
+## 14. BACKEND API DESIGN
+
+Implement a consistent, versionable API structure.
+
+Suggested endpoints:
+
+Authentication:
+
+* POST /api/auth/verify
+* GET /api/auth/me
+
+Agent:
+
+* POST /api/agent/chat
+* POST /api/agent/tasks
+* GET /api/agent/tasks/{task_id}
+
+Catalog:
+
+* GET /api/products
+* GET /api/products/{product_id}
+
+Cart:
+
+* GET /api/cart
+* POST /api/cart/items
+* PATCH /api/cart/items/{item_id}
+* DELETE /api/cart/items/{item_id}
+
+Orders:
+
+* POST /api/orders
+* GET /api/orders
+* GET /api/orders/{order_id}
+
+Payments:
+
+* POST /api/payments/paypal/create
+* POST /api/payments/paypal/capture
+* POST /api/payments/paypal/webhook
+
+Transactions:
+
+* GET /api/transactions
+* GET /api/transactions/{transaction_id}
+
+Dashboard:
+
+* GET /api/dashboard/summary
+
+Health:
+
+* GET /api/health
+
+Adjust the methods and endpoint structure where necessary to match actual implementation requirements.
+
+Do not create endpoints that simply return hardcoded success responses.
+
+Validate every input and apply appropriate authentication and authorization.
+
+Use consistent HTTP status codes and structured error responses.
+
+Document the APIs and their required permissions.
+
+## 15. DATABASE DESIGN
+
+Implement Firestore collections for:
+
+* users
+* products
+* conversations
+* agent_tasks
+* carts
+* orders
+* transactions
+* activity_logs
+
+Define appropriate document schemas, indexes, timestamps, and relationships.
+
+Requirements:
+
+* Every user-owned record must include a trustworthy owner reference.
+* Verify ownership on every relevant backend operation.
+* Store only necessary information.
+* Keep financial records server-controlled.
+* Maintain an auditable association between local orders and PayPal orders.
+* Never treat an unverified client-provided payment status as authoritative.
+
+Provide a repeatable catalog-seeding process.
+
+Add Firestore security rules appropriate for the selected architecture. If the backend uses privileged Firebase Admin access, enforce authorization in the backend because Admin SDK operations bypass Firestore client security rules.
+
+Document all Firebase configuration steps.
+
+## 16. SECURITY REQUIREMENTS
+
+Implement:
+
+* Firebase token verification.
+* Backend authorization.
+* Environment-based secrets.
+* Input validation.
+* Safe exception handling.
+* Rate limiting where practical.
+* CORS restricted to configured frontend origins.
+* Payment amount verification.
+* Order ownership verification.
+* Duplicate payment protection.
+* Webhook signature verification if webhooks are enabled.
+* Safe logging.
+* AI tool allowlisting.
+* Protection against prompt injection affecting privileged actions.
+* Protection against unauthorized order modifications.
+* Dependency and configuration checks.
+
+Never expose secrets in:
+
+* Frontend source code.
+* Public repositories.
+* Browser responses.
+* Logs.
+* Error messages.
+
+Create a `.env.example` file containing placeholders only.
+
+Never overwrite a valid payment state based solely on untrusted frontend input.
+
+## 17. PROJECT STRUCTURE
+
+Use a clean modular structure similar to:
+
+AgentPay-AI/
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── layouts/
+│   │   ├── services/
+│   │   ├── hooks/
+│   │   ├── types/
+│   │   ├── utils/
+│   │   └── main.tsx
+│   └── package.json
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   ├── core/
+│   │   ├── schemas/
+│   │   ├── models/
+│   │   ├── services/
+│   │   ├── agents/
+│   │   ├── payments/
+│   │   ├── database/
+│   │   └── main.py
+│   └── requirements.txt
+├── tests/
+├── docs/
+│   ├── architecture.md
+│   └── api.md
+├── .env.example
+├── .gitignore
+├── LICENSE
+└── README.md
+
+You may adjust the structure to improve implementation quality, but keep the frontend, backend, agent logic, database access, and payment integration appropriately separated.
+
+## 18. TESTING REQUIREMENTS
+
+Create meaningful automated tests.
+
+### Backend Tests
+
+* Health endpoint.
+* Request validation.
+* Authentication and authorization.
+* Product search.
+* Product comparison.
+* Cart calculations.
+* Order creation.
+* Price tampering prevention.
+* User ownership enforcement.
+* Invalid order-state transitions.
+* Payment error handling.
+* Duplicate payment prevention.
+* AI tool argument validation.
+
+### Payment Tests
+
+* Use PayPal Sandbox or mocked PayPal responses where appropriate.
+* Test successful checkout.
+* Test cancelled checkout.
+* Test failed capture.
+* Test unexpected responses.
+* Test repeated capture requests.
+* Test amount and currency mismatches.
+* Test payment reconciliation.
+
+### Frontend Tests
+
+* Authentication states.
+* Navigation.
+* Product selection.
+* Cart interactions.
+* Checkout confirmation.
+* Loading and error states.
+* Dashboard rendering.
+
+### End-to-End Validation
+
+Verify the complete workflow:
+
+Sign In → Submit Request → Get Recommendations → Compare Products → Add to Cart → Approve Purchase → Complete Sandbox Checkout → Verify Payment → Confirm Order → View Dashboard.
+
+Never claim that tests passed unless they were actually executed and their results checked.
+
+Clearly identify tests that require external credentials or manual Sandbox interaction.
+
+## 19. ERROR HANDLING AND RELIABILITY
+
+Handle:
+
+* Missing API keys.
+* Invalid AI responses.
+* AI provider outages.
+* Network failures.
+* Firebase configuration errors.
+* Expired authentication tokens.
+* Invalid product IDs.
+* Unavailable products.
+* Cart price changes.
+* PayPal authentication failures.
+* Payment cancellation.
+* Capture failures.
+* Timeouts with uncertain payment outcomes.
+* Duplicate requests.
+* Database failures.
+
+Use useful error messages and safe retry behavior.
+
+Avoid swallowing exceptions or returning success for failed operations.
+
+Never automatically create another payment when the result of an earlier payment operation is uncertain without first reconciling its status.
+
+## 20. DEVELOPMENT PRIORITIES
+
+Build in the following order.
+
+### Phase 1: Foundation
+
+* Inspect the environment.
+* Establish project structure.
+* Configure frontend and backend.
+* Configure environment variables.
+* Set up Firebase authentication and database access.
+* Add health checks.
+
+### Phase 2: Commerce
+
+* Create catalog schema and seed data.
+* Implement product search.
+* Implement comparison.
+* Build cart.
+* Implement order creation and validation.
+
+### Phase 3: AI Agent
+
+* Integrate the selected AI provider.
+* Implement structured outputs.
+* Implement catalog tools.
+* Add budget optimization.
+* Add workflow states.
+* Add recommendation explanations.
+
+### Phase 4: Payments
+
+* Configure PayPal Sandbox.
+* Implement server-side order creation.
+* Implement checkout.
+* Implement capture and verification.
+* Handle errors and duplicate requests.
+* Test the complete payment lifecycle.
+
+### Phase 5: Dashboard and UI
+
+* Build the required screens.
+* Connect every screen to actual application functionality.
+* Add loading, empty, and error states.
+* Implement responsive layouts.
+* Add charts based on real records.
+
+### Phase 6: Quality Assurance
+
+* Run tests.
+* Fix frontend build errors.
+* Fix backend errors.
+* Validate API contracts.
+* Check security configurations.
+* Test the complete user journey.
+
+### Phase 7: Deployment and Submission
+
+* Prepare deployment configuration.
+* Deploy the frontend and backend where practical.
+* Configure production environment variables.
+* Verify CORS and external API configuration.
+* Write the README.
+* Add an open-source LICENSE.
+* Document setup and testing.
+* Prepare a demonstration script.
+* Produce a demonstration video plan under three minutes.
+
+Prioritize the essential working workflow before optional features.
+
+## 21. DEPLOYMENT REQUIREMENTS
+
+Provide:
+
+* Exact installation commands.
+* Frontend startup commands.
+* Backend startup commands.
+* Required environment variables.
+* Firebase setup instructions.
+* PayPal Sandbox setup instructions.
+* AI provider configuration instructions.
+* Database initialization instructions.
+* Testing commands.
+* Build commands.
+* Deployment instructions.
+* Troubleshooting steps.
+
+Use the configured backend URL rather than hardcoded localhost URLs.
+
+Separate development and deployment configuration.
+
+Ensure the frontend can communicate with the deployed backend through configured environment variables.
+
+Do not claim that deployment is complete unless it has actually been performed and verified.
+
+## 22. GITHUB AND HACKATHON DELIVERABLES
+
+Prepare:
+
+* Complete source code.
+* Public GitHub repository.
+* Open-source license.
+* Detailed README.
+* Architecture documentation.
+* Environment setup guide.
+* API documentation.
+* Database schema.
+* Testing instructions.
+* Sandbox testing instructions.
+* Known limitations.
+* Screenshots of the actual working application.
+* Demo script.
+* Under-three-minute YouTube demonstration plan.
+
+The README must explain the problem, solution, unique features, technology stack, architecture, setup, testing, payment flow, and future scope.
+
+Do not include real credentials or private personal information in the repository.
+
+## 23. QUALITY RULES
+
+Follow these rules throughout development:
+
+1. Do not generate a static-only application.
+2. Do not use fake payment-success responses.
+3. Do not hardcode dashboard metrics as real user data.
+4. Do not expose secrets.
+5. Do not trust client-provided prices.
+6. Do not allow AI to authorize payments independently.
+7. Do not fabricate products, prices, or inventory.
+8. Do not leave important buttons nonfunctional.
+9. Do not ignore TypeScript or Python errors.
+10. Do not suppress errors simply to make the application appear functional.
+11. Do not introduce unnecessary dependencies.
+12. Do not duplicate business logic across frontend and backend.
+13. Do not claim tests, deployments, or integrations were completed without verification.
+14. Do not implement advanced features at the expense of the core workflow.
+15. Keep the implementation understandable and maintainable.
+
+When errors occur:
+
+* Inspect the actual error.
+* Identify its root cause.
+* Fix the underlying issue.
+* Rerun the relevant checks.
+* Report any remaining limitations honestly.
+
+If an external service is unavailable, continue building independently testable functionality and provide a clear configuration path.
+
+## 24. DEFINITION OF DONE
+
+The application is ready for submission only when:
+
+* The frontend builds successfully.
+* The backend starts successfully.
+* Authentication works.
+* Protected APIs enforce permissions.
+* The product catalog works.
+* AI recommendations use real catalog data.
+* The agent can execute approved application tools.
+* Cart totals are calculated securely.
+* Orders are stored persistently.
+* PayPal Sandbox checkout works.
+* Payment status is verified server-side.
+* Orders update correctly after payment.
+* Errors and cancellations are handled.
+* Dashboard metrics use actual records.
+* Automated tests have been executed.
+* Critical failures have been addressed.
+* Setup instructions are complete.
+* The public repository contains an open-source license.
+* The demo can be reproduced using the documented instructions.
+
+If any requirement cannot be completed, explicitly report what remains unfinished and why.
+
+## 25. FIRST ACTION
+
+Start by examining the current working environment and determining whether this is a new project or an existing repository.
+
+If an existing project is present:
+
+* Inspect its structure.
+* Identify reusable components.
+* Check configuration and dependencies.
+* Preserve useful existing work.
+* Avoid overwriting files without understanding their purpose.
+
+If starting from scratch:
+
+* Create the project structure.
+* Set up the frontend and backend.
+* Create the environment templates.
+* Implement a minimal health-check workflow.
+* Verify that both applications start successfully.
+
+Then continue phase by phase.
+
+Do not stop after providing the architecture or a list of files.
+
+Implement the application incrementally, run the available checks, fix errors, and maintain a concise progress report describing:
+
+* What was implemented.
+* What was tested.
+* What passed.
+* What failed.
+* What remains.
+* Which credentials or manual actions are required.
+
+**FINAL OBJECTIVE: Deliver a genuinely functional, secure, documented, and demonstrable AgentPay AI application with meaningful agentic AI capabilities and a verified PayPal Sandbox payment workflow.**
